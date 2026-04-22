@@ -1,10 +1,158 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>System Monitor Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .alert {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        canvas {
+            margin-top: 10px;
+        }
+    </style>
 </head>
+
 <body>
-$END$
+
+<div class="container">
+
+    <h1>💻 System Monitor Dashboard</h1>
+
+    <div class="card alert" id="alert">
+        System Normal ✅
+    </div>
+
+    <div class="card">
+        <h3>CPU Usage (%)</h3>
+        <canvas id="cpuChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h3>Memory Usage (%)</h3>
+        <canvas id="memoryChart"></canvas>
+    </div>
+
+</div>
+
+<script>
+    const cpuData = [];
+    const memoryData = [];
+    const labels = [];
+
+    const cpuChart = new Chart(document.getElementById("cpuChart"), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'CPU %',
+                data: cpuData,
+                borderWidth: 2,
+                tension: 0.3
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100
+                }
+            }
+        }
+    });
+
+    const memoryChart = new Chart(document.getElementById("memoryChart"), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Memory %',
+                data: memoryData,
+                borderWidth: 2,
+                tension: 0.3
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100
+                }
+            }
+        }
+    });
+
+    function updateData() {
+        Promise.all([
+            fetch("/cpu").then(res => res.text()),
+            fetch("/memory").then(res => res.text())
+        ]).then(([cpu, memory]) => {
+
+            cpu = parseFloat(cpu);
+            memory = parseFloat(memory);
+
+            const time = new Date().toLocaleTimeString();
+
+            labels.push(time);
+            cpuData.push(cpu);
+            memoryData.push(memory);
+
+            if (labels.length > 10) {
+                labels.shift();
+                cpuData.shift();
+                memoryData.shift();
+            }
+
+            cpuChart.update();
+            memoryChart.update();
+
+            const alertBox = document.getElementById("alert");
+
+            if (cpu > 80) {
+                alertBox.innerText = "⚠ High CPU Usage!";
+                alertBox.style.color = "white";
+                alertBox.style.background = "#e74c3c";
+            } else {
+                alertBox.innerText = "System Normal ✅";
+                alertBox.style.color = "white";
+                alertBox.style.background = "#2ecc71";
+            }
+        });
+    }
+
+    setInterval(updateData, 1000);
+</script>
+
 </body>
 </html>
