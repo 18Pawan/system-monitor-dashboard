@@ -1,7 +1,11 @@
 # 💻 System Monitor Dashboard
 
-A real-time system monitoring application built using **Spring Boot** and **Chart.js** that visualizes CPU and Memory usage dynamically.
+[![Live Demo](https://img.shields.io/badge/Live-Demo-green?style=for-the-badge)](https://system-monitor-3tc3.onrender.com/)
 
+🔗 **Live App:** https://system-monitor-3tc3.onrender.com/  
+🔗 **GitHub Repo:** https://github.com/18Pawan/system-monitor-dashboard
+
+A real-time system monitoring dashboard built using **Spring Boot** and **Chart.js** that visualizes CPU and memory usage dynamically with live updates.
 ---
 
 ## 🚀 Features
@@ -12,6 +16,7 @@ A real-time system monitoring application built using **Spring Boot** and **Char
 - ⚠️ CPU alert system (high usage warning)
 - 🔄 Auto-refresh every second
 - 🌐 REST APIs for system metrics
+- ☁️ Deployed on cloud (Render)
 
 ---
 
@@ -42,6 +47,14 @@ A real-time system monitoring application built using **Spring Boot** and **Char
 ## ▶️ How to Run
 
 ```bash
-git clone https://github.com/your-username/system-monitor-dashboard.git
+git clone https://github.com/18Pawan/system-monitor-dashboard.git
 cd system-monitor-dashboard
-mvn spring-boot:run
+mvn clean package
+java -jar target/system-monitor-1.0-SNAPSHOT.jar
+
+
+## 🌍 Deployment
+
+The application is deployed on Render and accessible here:
+
+👉 https://system-monitor-3tc3.onrender.com/
