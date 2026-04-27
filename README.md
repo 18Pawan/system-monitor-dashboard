@@ -35,7 +35,7 @@ A real-time system monitoring application built using **Spring Boot** and **Char
 
 ## 📸 Screenshot
 
-
+![System Monitor Screenshot](screenshot.png)
 
 ---
 
